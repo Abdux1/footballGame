@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#06040f;color:#fff;min-height:100vh;overflow-x:hidden}
+.bg-grad{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,#1a0840 0%,#06040f 70%)}
+.stars{position:fixed;inset:0;pointer-events:none;z-index:1}
+.star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--d,3s) infinite}
+@keyframes twinkle{0%,100%{opacity:.08}50%{opacity:.8}}
+.screen{display:none;position:relative;z-index:2;min-height:100vh;flex-direction:column;align-items:center;justify-content:center;padding:20px 16px}
+.screen.active{display:flex}
+
+/* ── HOME ── */
+.home-ball{font-size:90px;animation:float 3.5s ease-in-out infinite;filter:drop-shadow(0 0 40px rgba(168,85,247,.8))}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-16px) rotate(5deg)}}
+.home-title{font-size:44px;font-weight:900;background:linear-gradient(135deg,#f0c040,#e040fb,#40c4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1;text-align:center;margin:10px 0 4px}
+.home-sub{font-size:13px;color:rgba(255,255,255,.4);text-align:center;margin-bottom:28px}
+.start-big{width:100%;max-width:340px;padding:20px 24px;border:none;border-radius:22px;background:linear-gradient(135deg,#7c3aed,#a855f7,#c026d3);color:#fff;font-size:18px;font-weight:900;cursor:pointer;display:flex;align-items:center;gap:14px;box-shadow:0 10px 40px rgba(168,85,247,.5);transition:.22s;margin-bottom:14px}
+.start-big:hover{transform:translateY(-3px);box-shadow:0 16px 50px rgba(168,85,247,.65)}
+.start-big:active{transform:scale(.97)}
+.sb-icon{width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.sb-text{text-align:right;flex:1}
+.sb-label{font-size:17px;font-weight:900}
+.sb-desc{font-size:11px;opacity:.7;margin-top:2px}
+.sb-arr{font-size:22px;opacity:.6}
+.mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:340px;margin-bottom:18px}
+.mc{background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.09);border-radius:18px;padding:14px 8px;text-align:center;cursor:pointer;transition:.2s}
+.mc:hover{background:rgba(168,85,247,.15);border-color:rgba(168,85,247,.4)}
+.mc-ico{font-size:28px;margin-bottom:6px}
+.mc-lbl{font-size:12px;font-weight:800}
+.mc-desc{font-size:10px;color:rgba(255,255,255,.4);margin-top:3px;line-height:1.4}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;width:100%;max-width:340px}
+.sc{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px 6px;text-align:center}
+.sc-n{font-size:20px;font-weight:900;color:#a78bfa}
+.sc-l{font-size:10px;color:rgba(255,255,255,.4);margin-top:3px}
+
+/* ── SETUP ── */
+.setup-card{background:rgba(255,255,255,.04);border:1.5px solid rgba(168,85,247,.2);border-radius:26px;padding:28px 24px;width:100%;max-width:370px;backdrop-filter:blur(10px)}
+.setup-title{font-size:22px;font-weight:900;text-align:center;margin-bottom:22px}
+.fl{font-size:12px;color:rgba(255,255,255,.45);margin-bottom:7px;display:block;margin-top:14px}
+.fi{width:100%;padding:13px 16px;border-radius:14px;border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:#fff;font-size:15px;outline:none;transition:.2s;font-family:inherit}
+.fi:focus{border-color:#a855f7;background:rgba(168,85,247,.1)}
+.play-btn{width:100%;padding:17px;border:none;border-radius:18px;background:linear-gradient(135deg,#7c3aed,#c026d3);color:#fff;font-size:16px;font-weight:900;cursor:pointer;margin-top:20px;transition:.2s;box-shadow:0 8px 28px rgba(168,85,247,.4)}
+.play-btn:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(168,85,247,.55)}
+.back-link{text-align:center;font-size:13px;color:rgba(255,255,255,.35);cursor:pointer;margin-top:14px;transition:.2s}
+.back-link:hover{color:rgba(255,255,255,.7)}
+
+/* ── CURTAIN ── */
+#curtain{position:fixed;inset:0;z-index:9000;display:none;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,#100520,#04020b)}
+.ci{text-align:center;padding:32px 24px;max-width:340px}
+.ce{font-size:90px;animation:cpulse 1.2s infinite alternate}
+@keyframes cpulse{from{transform:scale(1)}to{transform:scale(1.1)}}
+.cn{font-size:30px;font-weight:900;color:#f0c040;margin:12px 0 4px}
+.cs{font-size:14px;color:rgba(255,255,255,.45);margin-bottom:22px}
+.cw{background:rgba(244,67,54,.1);border:2px solid rgba(244,67,54,.35);border-radius:18px;padding:16px;margin-bottom:24px}
+.cwt{font-size:17px;font-weight:900;color:#f44336;margin-bottom:5px}
+.cws{font-size:13px;color:rgba(244,150,150,.8);line-height:1.6}
+.cr{padding:17px 54px;border:none;border-radius:18px;font-size:16px;font-weight:900;cursor:pointer;background:linear-gradient(135deg,#7c3aed,#c026d3);color:#fff;transition:.2s;box-shadow:0 8px 28px rgba(168,85,247,.45)}
+.cr:hover{transform:scale(1.05)}
+
+/* ── GAME ── */
+.game-wrap{width:100%;max-width:410px}
+.g-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.back-btn{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;color:#fff;transition:.2s}
+.back-btn:hover{background:rgba(255,255,255,.14)}
+.r-info{font-size:13px;font-weight:700;color:rgba(255,255,255,.6)}
+.sp{background:rgba(255,215,0,.12);border:1.5px solid rgba(255,215,0,.3);border-radius:22px;padding:5px 14px;font-size:13px;font-weight:800;color:#f0c040;display:flex;align-items:center;gap:5px}
+
+/* Timer */
+.timer-sec{display:flex;flex-direction:column;align-items:center;margin-bottom:16px}
+.timer-ring-wrap{position:relative;width:90px;height:90px;margin-bottom:8px}
+.timer-ring-wrap svg{transform:rotate(-90deg)}
+.tr-bg{fill:none;stroke:rgba(255,255,255,.08);stroke-width:5}
+.tr-fg{fill:none;stroke-width:5;stroke-dasharray:263.9;stroke-dashoffset:0;transition:stroke-dashoffset 1s linear,stroke .3s;stroke-linecap:round}
+.tr-n{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:28px;font-weight:900;color:#00e5ff;transition:color .3s}
+.danger .tr-n{color:#f44336}
+.progress-row{display:flex;gap:8px;justify-content:center}
+.pd{height:6px;border-radius:3px;transition:.35s}
+.pd.done{background:#7c3aed;width:22px}
+.pd.active{background:#f0c040;width:30px;animation:pdpulse 1s infinite}
+.pd.idle{background:rgba(255,255,255,.12);width:14px}
+@keyframes pdpulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* Score row */
+.score-duo{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.scard{border-radius:16px;padding:12px 10px;text-align:center;border:1.5px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);transition:.3s}
+.scard.active{border-color:rgba(168,85,247,.6);background:rgba(168,85,247,.1);box-shadow:0 0 20px rgba(168,85,247,.2)}
+.scard-num{font-size:26px;font-weight:900;color:#a78bfa}
+.scard-name{font-size:11px;color:rgba(255,255,255,.45);margin-top:3px}
+
+/* Secret panel */
+.secret-panel{background:linear-gradient(135deg,rgba(124,58,237,.18),rgba(192,38,211,.12));border:1.5px solid rgba(168,85,247,.3);border-radius:20px;padding:14px 16px;margin-bottom:12px;position:relative;overflow:hidden}
+.secret-panel::before{content:'';position:absolute;top:-40px;left:-40px;width:120px;height:120px;background:radial-gradient(circle,rgba(168,85,247,.15),transparent);pointer-events:none}
+.sp-lbl{font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:7px}
+.sp-name{font-size:21px;font-weight:900;color:#f0c040}
+.sp-badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
+.spb{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.spb-nat{background:rgba(64,196,255,.13);color:#40c4ff;border:1px solid rgba(64,196,255,.28)}
+.spb-pos{background:rgba(240,192,64,.12);color:#f0c040;border:1px solid rgba(240,192,64,.26)}
+.spb-club{background:rgba(0,230,118,.11);color:#00e676;border:1px solid rgba(0,230,118,.26)}
+.spb-num{background:rgba(255,107,53,.11);color:#FF6B35;border:1px solid rgba(255,107,53,.25)}
+
+/* Turn banner */
+.turn-banner{border-radius:16px;padding:11px 16px;text-align:center;font-weight:800;font-size:14px;margin-bottom:10px;transition:.3s}
+.tb-go{background:rgba(0,229,118,.08);border:1.5px solid rgba(0,229,118,.28);color:#00e676}
+.tb-ai{background:rgba(0,229,255,.08);border:1.5px solid rgba(0,229,255,.25);color:#00e5ff;display:flex;align-items:center;justify-content:center;gap:10px}
+.ai-spin{width:18px;height:18px;border:2.5px solid rgba(0,229,255,.2);border-top-color:#00e5ff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Q history */
+.q-history{margin-bottom:10px;max-height:170px;overflow-y:auto}
+.q-history::-webkit-scrollbar{width:3px}
+.q-history::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:3px}
+.q-item{display:flex;gap:8px;padding:9px 12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:12px;margin-bottom:6px;align-items:flex-start;animation:slideIn .25s ease}
+@keyframes slideIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.q-who{font-size:10px;font-weight:700;color:#a78bfa;min-width:0;padding-top:1px;white-space:nowrap}
+.q-body{flex:1;min-width:0}
+.q-txt-s{font-size:12px;color:rgba(255,255,255,.78);line-height:1.45}
+.q-ans-yes{display:inline-block;padding:2px 9px;border-radius:20px;font-size:10px;font-weight:700;background:rgba(0,200,83,.18);color:#00e676;margin-top:4px}
+.q-ans-no{display:inline-block;padding:2px 9px;border-radius:20px;font-size:10px;font-weight:700;background:rgba(244,67,54,.18);color:#f44336;margin-top:4px}
+.q-wait{font-size:10px;color:rgba(255,255,255,.3);margin-top:4px;display:inline-block}
+
+/* Unified input */
+.unified-input-wrap{margin-bottom:10px}
+.inp-label{font-size:11px;color:rgba(255,255,255,.4);margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.inp-label span{background:rgba(168,85,247,.2);color:#c084fc;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700}
+.inp-row{display:flex;gap:8px;margin-bottom:8px}
+.inp-main{flex:1;padding:13px 16px;border-radius:15px;border:1.5px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:#fff;font-size:14px;outline:none;transition:.2s;font-family:inherit}
+.inp-main:focus{border-color:#a855f7;background:rgba(168,85,247,.08)}
+.inp-main::placeholder{color:rgba(255,255,255,.3)}
+.send-btn{padding:13px 18px;border:none;border-radius:15px;font-size:14px;font-weight:900;cursor:pointer;color:#fff;white-space:nowrap;transition:.2s;flex-shrink:0}
+.send-btn:hover{transform:translateY(-2px)}
+.send-btn:active{transform:scale(.96)}
+.btn-ask{background:linear-gradient(135deg,#7c3aed,#a855f7)}
+.btn-guess{background:linear-gradient(135deg,#0891b2,#6d28d9)}
+
+/* Toggle */
+.inp-toggle{display:flex;background:rgba(255,255,255,.05);border-radius:12px;padding:3px;margin-bottom:10px;border:1px solid rgba(255,255,255,.08)}
+.itab{flex:1;padding:9px;border:none;background:transparent;color:rgba(255,255,255,.45);font-size:13px;font-weight:800;cursor:pointer;border-radius:9px;transition:.18s}
+.itab.act{background:linear-gradient(135deg,rgba(124,58,237,.5),rgba(192,38,211,.4));color:#fff}
+
+/* Quick Qs */
+.quick-qs-grid{display:flex;flex-direction:column;gap:6px}
+.qq{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px 14px;font-size:13px;color:rgba(255,255,255,.75);cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:.18s}
+.qq:hover{background:rgba(168,85,247,.14);border-color:rgba(168,85,247,.35);color:#fff}
+.qq-plus{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+
+/* Action hint */
+.action-hint{text-align:center;font-size:11px;color:rgba(255,255,255,.28);margin-top:5px}
+
+/* Notif */
+.notif{position:fixed;top:18px;left:50%;transform:translateX(-50%);padding:12px 22px;border-radius:16px;z-index:9999;font-size:14px;font-weight:800;animation:notifIn .28s ease;pointer-events:none;white-space:nowrap;backdrop-filter:blur(10px)}
+.n-d{background:rgba(30,20,60,.9);border:1.5px solid rgba(168,85,247,.4);color:#fff}
+.n-s{background:rgba(5,50,30,.92);border:1.5px solid #00e676;color:#00e676}
+.n-e{background:rgba(60,5,5,.92);border:1.5px solid #f44336;color:#f87171}
+.n-w{background:rgba(60,40,0,.92);border:1.5px solid #f0c040;color:#f0c040}
+@keyframes notifIn{from{opacity:0;transform:translateX(-50%) translateY(-16px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* Combo popup */
+.combo-pop{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);z-index:9998;text-align:center;pointer-events:none;transition:transform .3s cubic-bezier(.17,.89,.32,1.28)}
+.combo-pop.show{transform:translate(-50%,-50%) scale(1)}
+.combo-pop.hide{transform:translate(-50%,-50%) scale(0);transition:transform .2s ease}
+.cp-text{font-size:52px;font-weight:900;background:linear-gradient(135deg,#f0c040,#ff6b35);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;text-shadow:none}
+.cp-sub{font-size:16px;color:#fff;font-weight:700}
+
+/* Round flash */
+.round-flash{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:8888;display:flex;align-items:center;justify-content:center}
+.rf-in{text-align:center;animation:popIn .35s cubic-bezier(.17,.89,.32,1.28)}
+@keyframes popIn{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+.rf-num{font-size:100px;font-weight:900;background:linear-gradient(135deg,#f0c040,#e040fb);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.rf-lbl{font-size:22px;color:#fff;margin-top:8px}
+.rf-gold{font-size:15px;color:#f0c040;font-weight:800;margin-top:8px;animation:pulse-dot .8s infinite}
+
+/* Results */
+.res-wrap{text-align:center;width:100%;max-width:380px}
+.trophy-big{font-size:90px;animation:bounce .9s infinite alternate;filter:drop-shadow(0 0 30px rgba(240,192,64,.6))}
+@keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-16px)}}
+.res-title{font-size:30px;font-weight:900;color:#f0c040;margin:12px 0 4px}
+.res-sub{font-size:14px;color:rgba(255,255,255,.45);margin-bottom:22px}
+.res-scores{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px}
+.rsc{background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.09);border-radius:20px;padding:20px;text-align:center}
+.rsc-n{font-size:40px;font-weight:900;color:#a78bfa}
+.rsc-l{font-size:13px;color:rgba(255,255,255,.5);margin-top:5px}
+.replay-btn{width:100%;padding:17px;border:none;border-radius:18px;background:linear-gradient(135deg,#7c3aed,#c026d3);color:#fff;font-size:16px;font-weight:900;cursor:pointer;margin-bottom:10px;transition:.2s;box-shadow:0 8px 28px rgba(168,85,247,.4)}
+.replay-btn:hover{transform:translateY(-2px)}
+.home-btn2{width:100%;padding:14px;border:1.5px solid rgba(255,255,255,.12);background:transparent;border-radius:18px;color:rgba(255,255,255,.6);font-size:15px;font-weight:700;cursor:pointer;transition:.2s}
+.home-btn2:hover{background:rgba(255,255,255,.06)}
+
+/* Particles */
+.particle{position:fixed;pointer-events:none;z-index:9997;font-size:22px;animation:particleFly 1.2s ease-out forwards}
+@keyframes particleFly{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-120px) scale(.4)}}
+</style>
+</head>
+<body>
+<div class="bg-grad"></div>
+<div class="stars" id="stars"></div>
+
+<!-- HOME -->
+<div class="screen active" id="screen-home">
+  <div class="home-ball">⚽</div>
+  <div class="home-title">احزر اللاعب</div>
+  <div class="home-sub">خمّن اللاعب من خلال الأسئلة الذكية · 2026</div>
+  <button class="start-big" onclick="showScreen('screen-local-setup')">
+    <div class="sb-icon">⚽</div>
+    <div class="sb-text"><div class="sb-label">ابدأ اللعبة</div><div class="sb-desc">اسأل نفسك الآن</div></div>
+    <div class="sb-arr">›</div>
+  </button>
+  <div class="mode-grid">
+    <div class="mc" onclick="showScreen('screen-local-setup')">
+      <div class="mc-ico">🌐</div><div class="mc-lbl">أونلاين</div>
+      <div class="mc-desc">تحدي لاعبين<br><span style="color:#00e676">● 1,234</span></div>
+    </div>
+    <div class="mc" onclick="showScreen('screen-local-setup')">
+      <div class="mc-ico">👥</div><div class="mc-lbl">مع صديق</div>
+      <div class="mc-desc">غرفة خاصة</div>
+    </div>
+    <div class="mc" onclick="showScreen('screen-local-setup')">
+      <div class="mc-ico">⚔️</div><div class="mc-lbl">تحدي</div>
+      <div class="mc-desc">أصعب وأكبر</div>
+    </div>
+  </div>
+  <div class="stats-row">
+    <div class="sc"><div class="sc-n">25</div><div class="sc-l">ألعاب</div></div>
+    <div class="sc"><div class="sc-n">12</div><div class="sc-l">انتصارات</div></div>
+    <div class="sc"><div class="sc-n">89%</div><div class="sc-l">دقة</div></div>
+    <div class="sc"><div class="sc-n" style="color:#ff6b35">5🔥</div><div class="sc-l">سلسلة</div></div>
+  </div>
+</div>
+
+<!-- SETUP -->
+<div class="screen" id="screen-local-setup">
+  <div class="setup-card">
+    <div class="setup-title">🏠 وضع محلي</div>
+    <label class="fl">اسم اللاعب الأول</label>
+    <input class="fi" id="lp1" placeholder="اللاعب الأول..." maxlength="20"
+      onkeydown="if(event.key==='Enter')document.getElementById('lp2').focus()">
+    <label class="fl">اسم اللاعب الثاني</label>
+    <input class="fi" id="lp2" placeholder="اللاعب الثاني..." maxlength="20"
+      onkeydown="if(event.key==='Enter')startLocalGame()">
+    <button class="play-btn" onclick="startLocalGame()">🎮 ابدأ اللعبة</button>
+    <div class="back-link" onclick="showScreen('screen-home')">← رجوع</div>
+  </div>
+</div>
+
+<!-- CURTAIN -->
+<div id="curtain" style="display:none;position:fixed;inset:0;z-index:9000;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,#100520,#04020b)">
+  <div class="ci">
+    <div class="ce" id="c-icon">🙈</div>
+    <div class="cn" id="c-name">اللاعب</div>
+    <div class="cs" id="c-sub">دورك!</div>
+    <div class="cw"><div class="cwt">⚠️ تحذير!</div><div class="cws" id="c-warn">أخفِ الشاشة!</div></div>
+    <button class="cr" onclick="hideCurtain()">أنا جاهز 👀</button>
+  </div>
+</div>
+
+<!-- GAME -->
+<div class="screen" id="screen-game">
+  <div class="game-wrap">
+    <div class="g-header">
+      <div class="back-btn" onclick="showScreen('screen-home')">←</div>
+      <div class="r-info" id="r-info">الجولة 1 من 7</div>
+      <div class="sp">⭐ <span id="score-disp">0</span></div>
+    </div>
+    <div class="timer-sec">
+      <div class="timer-ring-wrap" id="trw">
+        <svg width="90" height="90" viewBox="0 0 90 90">
+          <defs>
+            <linearGradient id="tg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#00e5ff"/>
+              <stop offset="100%" stop-color="#7c3aed"/>
+            </linearGradient>
+          </defs>
+          <circle class="tr-bg" r="42" cx="45" cy="45"/>
+          <circle class="tr-fg" id="tcirc" r="42" cx="45" cy="45" stroke="url(#tg)"/>
+        </svg>
+        <div class="tr-n" id="tnum">45</div>
+      </div>
+      <div class="progress-row" id="prog-row"></div>
+    </div>
+    <div class="score-duo">
+      <div class="scard" id="sb1"><div class="scard-num" id="sc1">0</div><div class="scard-name" id="lb1">ل1</div></div>
+      <div class="scard" id="sb2"><div class="scard-num" id="sc2">0</div><div class="scard-name" id="lb2">ل2</div></div>
+    </div>
+    <div class="secret-panel">
+      <div class="sp-lbl">لاعبك السري — أخفه!</div>
+      <div class="sp-name" id="sec-name">...</div>
+      <div class="sp-badges" id="sec-info"></div>
+    </div>
+    <div class="turn-banner tb-go" id="turn-banner">دور اللاعب</div>
+    <div class="q-history" id="ql"></div>
+    <div class="unified-input-wrap" id="input-area">
+      <div class="inp-toggle">
+        <button class="itab act" id="tab-q" onclick="switchTab('q')">❓ سؤال</button>
+        <button class="itab" id="tab-g" onclick="switchTab('g')">🎯 تخمين</button>
+      </div>
+      <div id="area-q">
+        <div class="inp-row">
+          <input class="inp-main" id="q-inp" placeholder="اسأل سؤالاً نعم / لا..." maxlength="120"
+            onkeydown="if(event.key==='Enter')doAsk()">
+          <button class="send-btn btn-ask" onclick="doAsk()">سأل ›</button>
+        </div>
+        <div style="font-size:11px;color:rgba(255,255,255,.3);margin-bottom:8px;display:flex;align-items:center;gap:5px">✨ أسئلة مقترحة</div>
+        <div class="quick-qs-grid" id="quick-qs"></div>
+      </div>
+      <div id="area-g" style="display:none">
+        <div class="inp-row">
+          <input class="inp-main" id="g-inp" placeholder="اكتب اسم اللاعب..." maxlength="50"
+            onkeydown="if(event.key==='Enter')doGuess()">
+          <button class="send-btn btn-guess" onclick="doGuess()">احزر 🎯</button>
+        </div>
+        <div class="action-hint">تخمينات غير محدودة · حرف أو اثنان خطأ = صح ✓</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="screen" id="screen-results">
+  <div class="res-wrap">
+    <div class="trophy-big" id="res-crown">🏆</div>
+    <div class="res-title" id="res-title">الفائز!</div>
+    <div class="res-sub" id="res-sub">فوز مستحق</div>
+    <div class="res-scores">
+      <div class="rsc"><div class="rsc-n" id="fin-s1">0</div><div class="rsc-l" id="fin-l1">ل1</div></div>
+      <div class="rsc"><div class="rsc-n" id="fin-s2">0</div><div class="rsc-l" id="fin-l2">ل2</div></div>
+    </div>
+    <button class="replay-btn" onclick="playAgain()">🔄 العب مجدداً</button>
+    <button class="home-btn2" onclick="showScreen('screen-home')">🏠 الرئيسية</button>
+  </div>
+</div>
+
+<script>
+const API="https://api.anthropic.com/v1/messages",MDL="claude-sonnet-4-20250514";
+const TSEC=45,CIRC=263.9;
+let timerInt=null,timerLeft=TSEC,currentTab='q',aiAnswering=false;
+let G={},myRole='p1',usedNames=[];
+
+/* ── PLAYERS ── */
+const PDB=[
+  {name:'محمد صلاح',club:'ليفربول',nationality:'مصر',position:'مهاجم',number:11,age:33},
+  {name:'كيليان مبابي',club:'ريال مدريد',nationality:'فرنسا',position:'مهاجم',number:9,age:26},
+  {name:'ليونيل ميسي',club:'إنتر ميامي',nationality:'الأرجنتين',position:'مهاجم',number:10,age:38},
+  {name:'رونالدو',club:'النصر',nationality:'البرتغال',position:'مهاجم',number:7,age:41},
+  {name:'إيرلينغ هالاند',club:'مانشستر سيتي',nationality:'النرويج',position:'مهاجم',number:9,age:25},
+  {name:'فينيسيوس جونيور',club:'ريال مدريد',nationality:'البرازيل',position:'مهاجم',number:7,age:24},
+  {name:'هاري كين',club:'بايرن ميونيخ',nationality:'إنجلترا',position:'مهاجم',number:9,age:31},
+  {name:'روبرت ليفاندوفسكي',club:'برشلونة',nationality:'بولندا',position:'مهاجم',number:9,age:37},
+  {name:'بوكايو ساكا',club:'أرسنال',nationality:'إنجلترا',position:'مهاجم',number:7,age:23},
+  {name:'فيل فودن',club:'مانشستر سيتي',nationality:'إنجلترا',position:'مهاجم',number:47,age:25},
+  {name:'لامين يامال',club:'برشلونة',nationality:'إسبانيا',position:'مهاجم',number:19,age:17},
+  {name:'أنطوان غريزمان',club:'أتلتيكو مدريد',nationality:'فرنسا',position:'مهاجم',number:7,age:33},
+  {name:'مارتينيز لاوتارو',club:'إنتر ميلان',nationality:'الأرجنتين',position:'مهاجم',number:10,age:27},
+  {name:'فيكتور أوسيمهن',club:'غلطة سراي',nationality:'نيجيريا',position:'مهاجم',number:9,age:26},
+  {name:'سون هيونغ مين',club:'توتنهام',nationality:'كوريا الجنوبية',position:'مهاجم',number:7,age:33},
+  {name:'نيمار',club:'الهلال',nationality:'البرازيل',position:'مهاجم',number:10,age:33},
+  {name:'صالح الشهري',club:'الهلال',nationality:'السعودية',position:'مهاجم',number:11,age:30},
+  {name:'سالم الدوسري',club:'الهلال',nationality:'السعودية',position:'مهاجم',number:7,age:33},
+  {name:'جود بيلينغهام',club:'ريال مدريد',nationality:'إنجلترا',position:'وسط',number:5,age:22},
+  {name:'رودري',club:'مانشستر سيتي',nationality:'إسبانيا',position:'وسط',number:16,age:29},
+  {name:'لوكا مودريتش',club:'ريال مدريد',nationality:'كرواتيا',position:'وسط',number:10,age:40},
+  {name:'كيفن دي بروين',club:'مانشستر سيتي',nationality:'بلجيكا',position:'وسط',number:17,age:33},
+  {name:'برونو فيرنانديز',club:'مانشستر يونايتد',nationality:'البرتغال',position:'وسط',number:8,age:30},
+  {name:'غافي',club:'برشلونة',nationality:'إسبانيا',position:'وسط',number:6,age:20},
+  {name:'بيدري',club:'برشلونة',nationality:'إسبانيا',position:'وسط',number:8,age:23},
+  {name:'ديكلان رايس',club:'أرسنال',nationality:'إنجلترا',position:'وسط',number:41,age:26},
+  {name:'مارتن أودغارد',club:'أرسنال',nationality:'النرويج',position:'وسط',number:8,age:26},
+  {name:'خافي سيمونز',club:'باريس سان جيرمان',nationality:'هولندا',position:'وسط',number:6,age:22},
+  {name:'فيرجيل فان دايك',club:'ليفربول',nationality:'هولندا',position:'مدافع',number:4,age:33},
+  {name:'ترنت ألكسندر-أرنولد',club:'ريال مدريد',nationality:'إنجلترا',position:'مدافع',number:12,age:26},
+  {name:'ويليام سالیبا',club:'أرسنال',nationality:'فرنسا',position:'مدافع',number:12,age:24},
+  {name:'ألفونسو ديفيز',club:'ريال مدريد',nationality:'كندا',position:'مدافع',number:19,age:24},
+  {name:'أنطونيو رودي',club:'ريال مدريد',nationality:'ألمانيا',position:'مدافع',number:22,age:32},
+  {name:'ألسون بيكر',club:'ليفربول',nationality:'البرازيل',position:'حارس مرمى',number:1,age:32},
+  {name:'تيبو كورتوا',club:'ريال مدريد',nationality:'بلجيكا',position:'حارس مرمى',number:1,age:33},
+  {name:'مانويل نوير',club:'بايرن ميونيخ',nationality:'ألمانيا',position:'حارس مرمى',number:1,age:39},
+  {name:'إيمي مارتينيز',club:'أستون فيلا',nationality:'الأرجنتين',position:'حارس مرمى',number:1,age:32},
+  {name:'ديفيد رايا',club:'أرسنال',nationality:'إسبانيا',position:'حارس مرمى',number:22,age:29},
+];
+
+const QQS=[
+  'هل اللاعب أوروبي؟','هل اللاعب برازيلي؟','هل اللاعب فرنسي؟',
+  'هل اللاعب إسباني؟','هل اللاعب إنجليزي؟','هل اللاعب أرجنتيني؟',
+  'هل اللاعب برتغالي؟','هل اللاعب هولندي؟','هل اللاعب بلجيكي؟',
+  'هل اللاعب مصري؟','هل اللاعب سعودي؟','هل اللاعب نرويجي؟',
+  'هل اللاعب مهاجم؟','هل اللاعب وسط؟','هل اللاعب مدافع؟','هل اللاعب حارس مرمى؟',
+  'هل يلعب في ريال مدريد؟','هل يلعب في برشلونة؟','هل يلعب في مانشستر سيتي؟',
+  'هل يلعب في ليفربول؟','هل يلعب في أرسنال؟','هل يلعب في بايرن ميونيخ؟',
+  'هل يلعب في السعودية؟','هل يلعب في الدوري الإنجليزي؟','هل يلعب في الدوري الإسباني؟',
+  'هل عمره أقل من 25؟','هل عمره فوق 30؟','هل عمره بين 25 و30؟',
+  'هل فاز بكأس العالم؟','هل فاز بدوري أبطال أوروبا؟','هل فاز بالكرة الذهبية؟',
+  'هل رقمه 10؟','هل رقمه 9؟','هل رقمه 7؟','هل رقمه 1؟',
+];
+
+/* ── STARS ── */
+(()=>{const s=document.getElementById('stars');for(let i=0;i<75;i++){const d=document.createElement('div');d.className='star';const z=Math.random()*2.2+.5;d.style.cssText=`width:${z}px;height:${z}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${(Math.random()*3+2).toFixed(1)}s;animation-delay:${(Math.random()*5).toFixed(1)}s;opacity:${(Math.random()*.55+.08).toFixed(2)}`;s.appendChild(d);}})();
+
+/* ── UTILS ── */
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
+function notify(msg,type='d',ms=2600){document.querySelectorAll('.notif').forEach(n=>n.remove());const d=document.createElement('div');d.className=`notif n-${type}`;d.textContent=msg;document.body.appendChild(d);setTimeout(()=>d.remove(),ms)}
+
+/* Levenshtein for fuzzy matching */
+function lev(a,b){const m=a.length,n=b.length;const dp=Array.from({length:m+1},(_,i)=>Array.from({length:n+1},(_,j)=>i===0?j:j===0?i:0));for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)dp[i][j]=a[i-1]===b[j-1]?dp[i-1][j-1]:1+Math.min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]);return dp[m][n]}
+
+function fuzzyMatch(guess,target){
+  const g=guess.trim().toLowerCase(),t=target.trim().toLowerCase();
+  if(g===t)return true;
+  if(lev(g,t)<=2)return true;
+  const tWords=t.split(' ').filter(w=>w.length>2);
+  for(const w of tWords){if(g===w||lev(g,w)<=2)return true;if(g.includes(w)||w.includes(g))return true}
+  return false;
+}
+
+/* ── GAME STATE ── */
+function initG(p1n,p2n){usedNames=[];return{round:1,totalRounds:7,scores:{p1:0,p2:0},p1:{name:p1n,secret:null},p2:{name:p2n,secret:null},currentTurn:'p1',questions:[],goldenRound:Math.floor(Math.random()*7)+1}}
+
+function pickPlayer(){const pool=PDB.filter(p=>!usedNames.includes(p.name));const p=pool.length?pool[Math.floor(Math.random()*pool.length)]:PDB[Math.floor(Math.random()*PDB.length)];usedNames.push(p.name);return p}
+
+/* ── AI ── */
+async function aiAnswer(q,sec){
+  const prompt=`محكّم لعبة 2026. اللاعب: ${sec.name}، النادي: ${sec.club}، الجنسية: ${sec.nationality}، المركز: ${sec.position}، الرقم: ${sec.number}، العمر: ${sec.age}. السؤال: "${q}". أجب بـ "نعم" أو "لا" فقط.`;
+  try{const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:MDL,max_tokens:10,messages:[{role:'user',content:prompt}]})});const d=await r.json();const t=(d.content[0].text||'').trim();if(t.includes('نعم'))return true;if(t.includes('لا'))return false}catch(e){}return localAns(q,sec)
+}
+
+function localAns(q,s){
+  q=q.toLowerCase();const nat=s.nationality,pos=s.position,club=s.club,age=s.age,num=s.number;
+  const has=(str,terms)=>terms.some(t=>str.includes(t));
+  const EU=['فرنسا','إسبانيا','ألمانيا','إنجلترا','البرتغال','إيطاليا','هولندا','بلجيكا','كرواتيا','النرويج','بولندا','الدنمارك','كندا'];
+  if(has(q,['أوروبي','اوروبي']))return EU.some(c=>nat.includes(c));
+  if(has(q,['برازيلي','البرازيل']))return nat.includes('البرازيل');
+  if(has(q,['فرنسي','فرنسا']))return nat.includes('فرنسا');
+  if(has(q,['إسباني','اسباني','إسبانيا']))return nat.includes('إسبانيا');
+  if(has(q,['إنجليزي','انجليزي','إنجلترا']))return nat.includes('إنجلترا');
+  if(has(q,['أرجنتيني','الأرجنتين']))return nat.includes('الأرجنتين');
+  if(has(q,['برتغالي','البرتغال']))return nat.includes('البرتغال');
+  if(has(q,['هولندي','هولندا']))return nat.includes('هولندا');
+  if(has(q,['بلجيكي','بلجيكا']))return nat.includes('بلجيكا');
+  if(has(q,['نرويجي','النرويج']))return nat.includes('النرويج');
+  if(has(q,['مصري','مصر']))return nat.includes('مصر');
+  if(has(q,['سعودي','السعودية']))return nat.includes('السعودية')||has(club,['الهلال','النصر','الاتحاد']);
+  if(has(q,['ألماني','ألمانيا']))return nat.includes('ألمانيا');
+  if(has(q,['مهاجم']))return pos.includes('مهاجم');
+  if(has(q,['وسط']))return pos.includes('وسط');
+  if(has(q,['مدافع']))return pos.includes('مدافع');
+  if(has(q,['حارس']))return pos.includes('حارس');
+  if(has(q,['ريال مدريد']))return club.includes('ريال مدريد');
+  if(has(q,['برشلونة']))return club.includes('برشلونة');
+  if(has(q,['مانشستر سيتي']))return club.includes('مانشستر سيتي');
+  if(has(q,['ليفربول']))return club.includes('ليفربول');
+  if(has(q,['أرسنال','ارسنال']))return club.includes('أرسنال');
+  if(has(q,['بايرن','ميونيخ']))return club.includes('بايرن');
+  if(has(q,['السعودية','الدوري السعودي']))return has(club,['الهلال','النصر','الاتحاد']);
+  if(has(q,['الدوري الإنجليزي','بريميرليغ']))return has(club,['ليفربول','مانشستر سيتي','مانشستر يونايتد','أرسنال','توتنهام','أستون فيلا','ويست هام','برايتون']);
+  if(has(q,['الدوري الإسباني','لاليغا']))return has(club,['ريال مدريد','برشلونة','أتلتيكو']);
+  if(has(q,['أقل من 25','تحت 25']))return age<25;
+  if(has(q,['فوق 30','أكثر من 30','أكبر من 30']))return age>30;
+  if(has(q,['بين 25 و30']))return age>=25&&age<=30;
+  if(has(q,['رقمه 10','رقم 10']))return num===10;
+  if(has(q,['رقمه 9','رقم 9']))return num===9;
+  if(has(q,['رقمه 7','رقم 7']))return num===7;
+  if(has(q,['رقمه 1','رقم 1']))return num===1;
+  if(has(q,['الكرة الذهبية','بالون دور']))return['ميسي','رونالدو','مودريتش','بنزيم','رودري'].some(n=>s.name.includes(n));
+  if(has(q,['كأس العالم']))return has(nat,['الأرجنتين','فرنسا','إسبانيا','ألمانيا','البرازيل']);
+  if(has(q,['دوري أبطال','تشامبيونز']))return has(club,['ريال مدريد','ليفربول','مانشستر سيتي','برشلونة','بايرن','إنتر']);
+  return Math.random()>.5;
+}
+
+/* ── START ── */
+async function startLocalGame(){
+  const p1=document.getElementById('lp1').value.trim(),p2=document.getElementById('lp2').value.trim();
+  if(!p1||!p2){notify('أدخل اسم كلا اللاعبين','w');return}
+  G=initG(p1,p2);G.p1.secret=pickPlayer();G.p2.secret=pickPlayer();
+  myRole='p1';enterGame();showCurtain('p1',p1,false);
+}
+
+function showCurtain(role,name,isSwitch){
+  const c=document.getElementById('curtain'),other=G[role==='p1'?'p2':'p1']?.name||'';
+  document.getElementById('c-icon').textContent=isSwitch?'🔄':'🙈';
+  document.getElementById('c-name').textContent=name;
+  document.getElementById('c-sub').textContent=isSwitch?'دورك الآن!':'مرحباً!';
+  document.getElementById('c-warn').innerHTML=isSwitch?`<b style="color:#f44336">أخبر ${other} أن يبعد نظره!</b><br>اضغط جاهز لترى لاعبك السري`:`أخفِ الشاشة عن اللاعب الآخر!`;
+  c.style.display='flex';
+}
+function hideCurtain(){document.getElementById('curtain').style.display='none';renderGame()}
+function enterGame(){showScreen('screen-game')}
+
+/* ── RENDER ── */
+function renderGame(){
+  const rnd=G.round,tot=G.totalRounds;
+  document.getElementById('r-info').textContent=`الجولة ${rnd} من ${tot}`;
+  document.getElementById('score-disp').textContent=G.scores[G.currentTurn];
+  document.getElementById('sc1').textContent=G.scores.p1;
+  document.getElementById('sc2').textContent=G.scores.p2;
+  document.getElementById('lb1').textContent=G.p1.name;
+  document.getElementById('lb2').textContent=G.p2.name;
+  document.getElementById('sb1').className='scard'+(G.currentTurn==='p1'?' active':'');
+  document.getElementById('sb2').className='scard'+(G.currentTurn==='p2'?' active':'');
+  const pr=document.getElementById('prog-row');pr.innerHTML='';
+  for(let i=1;i<=tot;i++){const d=document.createElement('div');d.className='pd '+(i<rnd?'done':i===rnd?'active':'idle');pr.appendChild(d)}
+  const sec=G[G.currentTurn].secret;
+  if(sec){
+    document.getElementById('sec-name').textContent=sec.name;
+    document.getElementById('sec-info').innerHTML=
+      `<span class="spb spb-nat">${sec.nationality}</span><span class="spb spb-pos">${sec.position}</span><span class="spb spb-club">${sec.club}</span><span class="spb spb-num">رقم ${sec.number}</span>`;
+  }
+  renderBanner();renderQL();renderQQs();
+  if(!aiAnswering){startTimer(Date.now())}
+}
+
+function renderBanner(){
+  const b=document.getElementById('turn-banner');
+  if(aiAnswering){b.className='turn-banner tb-ai';b.innerHTML='<div class="ai-spin"></div>🤖 AI يتحقق من الإجابة...'}
+  else{b.className='turn-banner tb-go';b.textContent=G[G.currentTurn].name+' — دورك! اسأل أو خمّن'}
+}
+
+function renderQL(){
+  const ql=document.getElementById('ql');ql.innerHTML='';
+  G.questions.forEach((q)=>{
+    const d=document.createElement('div');d.className='q-item';
+    const askerName=G[q.asker]?.name||q.asker;
+    const ansHtml=q.answer===null
+      ?'<span class="q-wait">جاري الإجابة...</span>'
+      :`<span class="${q.answer?'q-ans-yes':'q-ans-no'}">${q.answer?'✅ نعم':'❌ لا'}</span>`;
+    d.innerHTML=`<span class="q-who">سؤال من ${askerName}</span><div class="q-body"><span class="q-txt-s">${q.text}</span><br>${ansHtml}</div>`;
+    ql.appendChild(d);
+  });
+  ql.scrollTop=ql.scrollHeight;
+}
+
+function renderQQs(){
+  const c=document.getElementById('quick-qs');
+  const asked=new Set(G.questions.map(q=>q.text));
+  const avail=QQS.filter(q=>!asked.has(q)).sort(()=>Math.random()-.5).slice(0,5);
+  c.innerHTML='';
+  avail.forEach(q=>{
+    const b=document.createElement('div');b.className='qq';
+    b.innerHTML=`<span>${q}</span><span class="qq-plus">+</span>`;
+    b.onclick=()=>{document.getElementById('q-inp').value=q;document.getElementById('q-inp').focus()};
+    c.appendChild(b);
+  });
+}
+
+function switchTab(t){
+  currentTab=t;
+  document.getElementById('tab-q').className='itab'+(t==='q'?' act':'');
+  document.getElementById('tab-g').className='itab'+(t==='g'?' act':'');
+  document.getElementById('area-q').style.display=t==='q'?'block':'none';
+  document.getElementById('area-g').style.display=t==='g'?'block':'none';
+  setTimeout(()=>document.getElementById(t==='q'?'q-inp':'g-inp').focus(),50);
+}
+
+/* ── ASK ── */
+async function doAsk(){
+  if(aiAnswering){notify('انتظر... AI يجيب','w');return}
+  const inp=document.getElementById('q-inp'),q=inp.value.trim();
+  if(!q){notify('اكتب سؤالاً','w');return}
+  if(G.questions.some(x=>x.text===q)){notify('⚠️ سؤال مكرر!','w');return}
+  stopTimer();
+  const asker=G.currentTurn;
+  const targetSec=G[asker==='p1'?'p2':'p1'].secret;
+  G.questions.push({text:q,asker,answer:null});
+  inp.value='';aiAnswering=true;renderBanner();renderQL();
+  const ans=await aiAnswer(q,targetSec);
+  G.questions[G.questions.length-1].answer=ans;
+  aiAnswering=false;
+  G.currentTurn=asker==='p1'?'p2':'p1';
+  myRole=G.currentTurn;
+  showCurtain(G.currentTurn,G[G.currentTurn].name,true);
+}
+
+/* ── GUESS ── */
+function doGuess(){
+  const inp=document.getElementById('g-inp'),g=inp.value.trim();
+  if(!g){notify('اكتب اسم اللاعب','w');return}
+  const targetRole=G.currentTurn==='p1'?'p2':'p1';
+  const target=G[targetRole]?.secret?.name||'';
+  const correct=fuzzyMatch(g,target);
+  inp.value='';
+  if(correct){
+    stopTimer();
+    spawnParticles();
+    const guesser=G.currentTurn,pts=G.round===G.goldenRound?2:1;
+    G.scores[guesser]=(G.scores[guesser]||0)+pts;
+    showCombo(pts===2?'🌟 +2':'🎉 +1',pts===2?'جولة ذهبية!':'إجابة صحيحة!');
+    notify(pts===2?`🌟 رائع! نقطتان! هو: ${target}`:`🎉 صحيح! اللاعب: ${target}`,'s',3500);
+    if(G.round>=G.totalRounds){setTimeout(()=>showResults(),1800);return}
+    const nextRnd=G.round+1;
+    setTimeout(()=>{
+      showRoundFlash(nextRnd,G.goldenRound,()=>{
+        G.p1.secret=pickPlayer();G.p2.secret=pickPlayer();
+        G.round=nextRnd;G.questions=[];G.currentTurn='p1';
+        myRole='p1';showCurtain('p1',G.p1.name,true);
+      });
+    },1600);
+  }else{
+    notify('❌ خطأ! حاول مجدداً','e',2000);
+    switchTab('g');setTimeout(()=>document.getElementById('g-inp').focus(),80);
+  }
+}
+
+/* ── TIMER ── */
+function startTimer(ts){
+  stopTimer();timerLeft=Math.max(0,TSEC-Math.floor((Date.now()-ts)/1000));
+  updTimer();timerInt=setInterval(()=>{timerLeft--;updTimer();if(timerLeft<=0){stopTimer();onTimeUp()}},1000);
+}
+function stopTimer(){clearInterval(timerInt)}
+function updTimer(){
+  const n=document.getElementById('tnum'),c=document.getElementById('tcirc'),w=document.getElementById('trw');
+  n.textContent=timerLeft;
+  c.style.strokeDashoffset=CIRC*(1-timerLeft/TSEC);
+  const danger=timerLeft<=10;
+  n.style.color=danger?'#f44336':'#00e5ff';
+  c.style.stroke=danger?'#f44336':'url(#tg)';
+  w.className='timer-ring-wrap'+(danger?' danger':'');
+}
+function onTimeUp(){
+  notify('⏰ انتهى الوقت!','w');
+  G.currentTurn=G.currentTurn==='p1'?'p2':'p1';
+  myRole=G.currentTurn;
+  showCurtain(G.currentTurn,G[G.currentTurn].name,true);
+}
+
+/* ── FX ── */
+function spawnParticles(){
+  const emojis=['🎉','⭐','✨','🔥','💫','🌟'];
+  for(let i=0;i<8;i++){
+    const p=document.createElement('div');p.className='particle';
+    p.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+    p.style.left=Math.random()*100+'vw';p.style.top=Math.random()*60+20+'vh';
+    p.style.animationDelay=Math.random()*.4+'s';
+    document.body.appendChild(p);setTimeout(()=>p.remove(),1500);
+  }
+}
+
+function showCombo(main,sub){
+  let el=document.querySelector('.combo-pop');
+  if(!el){el=document.createElement('div');el.className='combo-pop';el.innerHTML=`<div class="cp-text"></div><div class="cp-sub"></div>`;document.body.appendChild(el)}
+  el.querySelector('.cp-text').textContent=main;
+  el.querySelector('.cp-sub').textContent=sub;
+  el.classList.remove('hide');el.classList.add('show');
+  setTimeout(()=>{el.classList.remove('show');el.classList.add('hide')},1400);
+}
+
+function showRoundFlash(num,golden,cb){
+  const f=document.createElement('div');f.className='round-flash';
+  f.innerHTML=`<div class="rf-in"><div class="rf-num">${num}</div><div class="rf-lbl">🔥 جولة جديدة!</div>${num===golden?'<div class="rf-gold">⭐ جولة ذهبية — نقطتان!</div>':''}</div>`;
+  document.body.appendChild(f);const done=()=>{if(f.parentNode)f.remove();if(cb)cb()};
+  f.onclick=done;setTimeout(done,2200);
+}
+
+/* ── RESULTS ── */
+function showResults(){
+  stopTimer();
+  document.getElementById('fin-s1').textContent=G.scores.p1;
+  document.getElementById('fin-s2').textContent=G.scores.p2;
+  document.getElementById('fin-l1').textContent=G.p1.name;
+  document.getElementById('fin-l2').textContent=G.p2.name;
+  const s1=G.scores.p1,s2=G.scores.p2,w=s1>s2?G.p1.name:s2>s1?G.p2.name:null;
+  document.getElementById('res-crown').textContent=w?'🏆':'🤝';
+  document.getElementById('res-title').textContent=w?`🎉 ${w} الفائز!`:'تعادل!';
+  document.getElementById('res-sub').textContent=w?'فوز مستحق — أحسنت!':'مباراة متكافئة';
+  showScreen('screen-results');
+}
+
+function playAgain(){
+  stopTimer();const p1n=G.p1.name,p2n=G.p2.name;
+  G=initG(p1n,p2n);G.p1.secret=pickPlayer();G.p2.secret=pickPlayer();
+  myRole='p1';enterGame();showCurtain('p1',p1n,false);
+}
+</script>
+</body>
+</html>
